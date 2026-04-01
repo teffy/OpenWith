@@ -4,720 +4,209 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OpenWith - Open Finder Folders in Any App</title>
-    <meta name="description" content="OpenWith lets you open the current Finder directory in your favorite apps with a single click. Toolbar button, context menu, and custom launch commands.">
-    <link rel="icon" type="image/png" href="screenshots/en/en-main.png">
+    <meta name="description" content="OpenWith lets you open the current Finder directory in your favorite apps with a single click.">
     <style>
-        :root {
-            --primary: #1a6de0;
-            --primary-light: #e8f0fe;
-            --text: #1d1d1f;
-            --text-secondary: #6e6e73;
-            --bg: #ffffff;
-            --card-bg: #f5f5f7;
-            --border: #d2d2d7;
-            --max-width: 960px;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --text: #f5f5f7;
-                --text-secondary: #a1a1a6;
-                --bg: #1d1d1f;
-                --card-bg: #2d2d2f;
-                --border: #424245;
-                --primary-light: #1a3a5c;
-            }
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
-            color: var(--text);
-            background: var(--bg);
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Nav */
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            nav {
-                background: rgba(29,29,31,0.8);
-            }
-        }
-
-        .nav-inner {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 12px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .nav-brand {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text);
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .nav-links a {
-            font-size: 14px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: var(--text);
-        }
-
-        .lang-switch {
-            display: inline-flex;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            overflow: hidden;
-            font-size: 13px;
-        }
-
-        .lang-switch button {
-            padding: 4px 12px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.2s;
-        }
-
-        .lang-switch button.active {
-            background: var(--primary);
-            color: #fff;
-        }
-
-        /* Hero */
-        .hero {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 80px 24px 60px;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 48px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 16px;
-        }
-
-        .hero p {
-            font-size: 20px;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 32px;
-        }
-
-        .badge-link {
-            display: inline-block;
-            transition: opacity 0.2s;
-        }
-
-        .badge-link:hover {
-            opacity: 0.8;
-        }
-
-        .badge-link img {
-            height: 48px;
-        }
-
-        .hero-screenshot {
-            margin-top: 48px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .hero-screenshot img {
-            max-width: 580px;
-            width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.12);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .hero-screenshot img {
-                box-shadow: 0 8px 40px rgba(0,0,0,0.4);
-            }
-        }
-
-        /* Features */
-        .features {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 60px 24px;
-        }
-
-        .features h2 {
-            font-size: 36px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-        }
-
-        .feature-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 28px;
-        }
-
-        .feature-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
-        }
-
-        .feature-card h3 {
-            font-size: 17px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .feature-card p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        /* Screenshots */
-        .screenshots {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 60px 24px;
-        }
-
-        .screenshots h2 {
-            font-size: 36px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .screenshot-section {
-            margin-bottom: 56px;
-        }
-
-        .screenshot-section:last-child {
-            margin-bottom: 0;
-        }
-
-        .screenshot-row {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
-
-        .screenshot-row.reverse {
-            flex-direction: row-reverse;
-        }
-
-        .screenshot-text {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .screenshot-text h3 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .screenshot-text p {
-            font-size: 15px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        .screenshot-img {
-            flex: 1.2;
-            min-width: 0;
-        }
-
-        .screenshot-img img {
-            width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .screenshot-img img {
-                box-shadow: 0 4px 24px rgba(0,0,0,0.35);
-            }
-        }
-
-        /* Guide */
-        .guide {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 60px 24px;
-        }
-
-        .guide h2 {
-            font-size: 36px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-        }
-
-        .step {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 28px;
-        }
-
-        .step-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: #fff;
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .step h3 {
-            font-size: 17px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .step p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        .step img {
-            width: 100%;
-            border-radius: 8px;
-            margin-top: 16px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-        }
-
-        /* Footer */
-        footer {
-            border-top: 1px solid var(--border);
-            margin-top: 60px;
-        }
-
-        .footer-inner {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 32px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-        }
-
-        .footer-links a:hover {
-            color: var(--text);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 32px;
-            }
-
-            .hero p {
-                font-size: 17px;
-            }
-
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .screenshot-row,
-            .screenshot-row.reverse {
-                flex-direction: column;
-            }
-
-            .steps {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-inner {
-                flex-direction: column;
-                gap: 12px;
-                text-align: center;
-            }
-
-            .nav-links {
-                gap: 16px;
-            }
-        }
-
-        /* i18n */
-        [lang="zh"] .en-only,
-        [lang="en"] .zh-only {
-            display: none !important;
+        :root{--primary:#1a6de0;--text:#1d1d1f;--text2:#6e6e73;--bg:#fff;--card:#f5f5f7;--border:#d2d2d7;--mw:960px}
+        @media(prefers-color-scheme:dark){:root{--text:#f5f5f7;--text2:#a1a1a6;--bg:#1d1d1f;--card:#2d2d2f;--border:#424245}}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;color:var(--text);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
+        nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.8);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+        @media(prefers-color-scheme:dark){nav{background:rgba(29,29,31,.8)}}
+        .nav-inner{max-width:var(--mw);margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+        .nav-brand{font-size:18px;font-weight:700;color:var(--text);text-decoration:none}
+        .nav-right{display:flex;align-items:center;gap:20px}
+        .nav-right a{font-size:14px;color:var(--text2);text-decoration:none}
+        .nav-right a:hover{color:var(--text)}
+        #lang-select{padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:13px;cursor:pointer}
+        .hero{max-width:var(--mw);margin:0 auto;padding:80px 24px 60px;text-align:center}
+        .hero h1{font-size:44px;font-weight:700;letter-spacing:-.5px;margin-bottom:16px}
+        .hero p{font-size:19px;color:var(--text2);max-width:600px;margin:0 auto 32px}
+        .hero-img{margin-top:40px}
+        .hero-img img{max-width:580px;width:100%;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.12)}
+        @media(prefers-color-scheme:dark){.hero-img img{box-shadow:0 8px 40px rgba(0,0,0,.4)}}
+        .section{max-width:var(--mw);margin:0 auto;padding:60px 24px}
+        .section h2{font-size:32px;font-weight:700;text-align:center;margin-bottom:40px}
+        .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+        .card{background:var(--card);border-radius:14px;padding:24px}
+        .card .icon{font-size:28px;margin-bottom:10px}
+        .card h3{font-size:16px;font-weight:600;margin-bottom:6px}
+        .card p{font-size:14px;color:var(--text2)}
+        .ss{margin-bottom:48px}
+        .ss:last-child{margin-bottom:0}
+        .ss-row{display:flex;gap:32px;align-items:center}
+        .ss-row.rev{flex-direction:row-reverse}
+        .ss-text{flex:1}
+        .ss-text h3{font-size:22px;font-weight:600;margin-bottom:10px}
+        .ss-text p{font-size:15px;color:var(--text2);line-height:1.6}
+        .ss-img{flex:1.2}
+        .ss-img img{width:100%;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.1)}
+        @media(prefers-color-scheme:dark){.ss-img img{box-shadow:0 4px 20px rgba(0,0,0,.35)}}
+        .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+        .step{background:var(--card);border-radius:14px;padding:24px}
+        .step-n{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--primary);color:#fff;font-size:15px;font-weight:700;margin-bottom:10px}
+        .step h3{font-size:16px;font-weight:600;margin-bottom:6px}
+        .step p{font-size:14px;color:var(--text2)}
+        .step img{width:100%;border-radius:8px;margin-top:12px;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+        footer{border-top:1px solid var(--border);margin-top:60px}
+        .footer-inner{max-width:var(--mw);margin:0 auto;padding:28px 24px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--text2)}
+        .footer-inner a{color:var(--text2);text-decoration:none;margin-left:20px}
+        .footer-inner a:hover{color:var(--text)}
+        @media(max-width:768px){
+            .hero h1{font-size:30px}.hero p{font-size:16px}
+            .grid3,.grid2{grid-template-columns:1fr}
+            .ss-row,.ss-row.rev{flex-direction:column}
+            .footer-inner{flex-direction:column;gap:10px;text-align:center}
+            .nav-right a.nav-link{display:none}
         }
     </style>
 </head>
 <body>
 
-<!-- Navigation -->
 <nav>
     <div class="nav-inner">
         <a href="#" class="nav-brand">OpenWith</a>
-        <div class="nav-links">
-            <a href="#features" class="en-only">Features</a>
-            <a href="#features" class="zh-only">功能</a>
-            <a href="#screenshots" class="en-only">Screenshots</a>
-            <a href="#screenshots" class="zh-only">截图</a>
-            <a href="#guide" class="en-only">Setup</a>
-            <a href="#guide" class="zh-only">设置指南</a>
-            <div class="lang-switch">
-                <button onclick="setLang('en')" id="btn-en" class="active">EN</button>
-                <button onclick="setLang('zh')" id="btn-zh">中文</button>
-            </div>
+        <div class="nav-right">
+            <a href="#features" class="nav-link" data-i="navFeatures">Features</a>
+            <a href="#screenshots" class="nav-link" data-i="navScreenshots">Screenshots</a>
+            <a href="#guide" class="nav-link" data-i="navSetup">Setup</a>
+            <select id="lang-select" onchange="setLang(this.value)">
+                <option value="en">English</option>
+                <option value="zh-Hans">简体中文</option>
+                <option value="zh-Hant">繁體中文</option>
+                <option value="ja">日本語</option>
+                <option value="ko">한국어</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="es">Español</option>
+                <option value="pt-BR">Português</option>
+                <option value="it">Italiano</option>
+                <option value="nl">Nederlands</option>
+                <option value="pl">Polski</option>
+                <option value="ru">Русский</option>
+                <option value="tr">Türkçe</option>
+                <option value="th">ไทย</option>
+                <option value="vi">Tiếng Việt</option>
+                <option value="id">Bahasa Indonesia</option>
+                <option value="ms">Bahasa Melayu</option>
+                <option value="hi">हिन्दी</option>
+                <option value="ar">العربية</option>
+                <option value="he">עברית</option>
+            </select>
         </div>
     </div>
 </nav>
 
-<!-- Hero -->
 <section class="hero">
-    <h1>
-        <span class="en-only">Open Finder Folders in Any App</span>
-        <span class="zh-only">在 Finder 中一键打开任意应用</span>
-    </h1>
-    <p>
-        <span class="en-only">Add a toolbar button or right-click menu to Finder, and instantly open any folder in Terminal, VS Code, iTerm2, or any app you choose.</span>
-        <span class="zh-only">在 Finder 工具栏添加按钮或使用右键菜单，即可快速用终端、VS Code、iTerm2 或任何应用打开文件夹。</span>
-    </p>
+    <h1 data-i="heroTitle">Open Finder Folders in Any App</h1>
+    <p data-i="heroDesc">Add a toolbar button or right-click menu to Finder, and instantly open any folder in Terminal, VS Code, iTerm2, or any app you choose.</p>
+    <div class="hero-img"><img id="img-main" src="screenshots/en/en-main.png" alt="OpenWith"></div>
+</section>
 
-    <!-- Mac App Store Badge placeholder -->
-    <!--
-    <a href="https://apps.apple.com/app/openwith/idXXXXXXXXX" class="badge-link">
-        <img class="en-only" src="https://developer.apple.com/assets/elements/badges/download-on-the-mac-app-store.svg" alt="Download on the Mac App Store">
-        <img class="zh-only" src="https://developer.apple.com/assets/elements/badges/download-on-the-mac-app-store.svg" alt="在 Mac App Store 下载">
-    </a>
-    -->
-
-    <div class="hero-screenshot">
-        <img class="en-only" src="screenshots/en/en-main.png" alt="OpenWith main interface">
-        <img class="zh-only" src="screenshots/zh/zh-main.png" alt="OpenWith 主界面">
+<section class="section" id="features">
+    <h2 data-i="featuresTitle">Features</h2>
+    <div class="grid3">
+        <div class="card"><div class="icon">🗂</div><h3 data-i="f1t">Toolbar Button</h3><p data-i="f1d">A dropdown menu right in the Finder toolbar. One click to open the current folder in any app.</p></div>
+        <div class="card"><div class="icon">📋</div><h3 data-i="f2t">Context Menu</h3><p data-i="f2d">Right-click on any folder and find OpenWith in the context menu. Works everywhere in Finder.</p></div>
+        <div class="card"><div class="icon">⚡️</div><h3 data-i="f3t">Smart Commands</h3><p data-i="f3d">Auto-detects popular dev tools and generates optimal launch commands. Supports custom commands with %PATH%.</p></div>
+        <div class="card"><div class="icon">📎</div><h3 data-i="f4t">Copy Path</h3><p data-i="f4d">Quickly copy the current directory path to clipboard from the toolbar menu.</p></div>
+        <div class="card"><div class="icon">🌐</div><h3 data-i="f5t">21 Languages</h3><p data-i="f5d">Full localization in 21 languages including English, Chinese, Japanese, Korean, French, German, and more.</p></div>
+        <div class="card"><div class="icon">🪶</div><h3 data-i="f6t">Lightweight</h3><p data-i="f6d">No background processes, no network requests, no tracking. Just a simple, fast Finder extension.</p></div>
     </div>
 </section>
 
-<!-- Features -->
-<section class="features" id="features">
-    <h2>
-        <span class="en-only">Features</span>
-        <span class="zh-only">功能特点</span>
-    </h2>
-    <div class="feature-grid">
-        <div class="feature-card">
-            <div class="feature-icon">🗂</div>
-            <h3>
-                <span class="en-only">Toolbar Button</span>
-                <span class="zh-only">工具栏按钮</span>
-            </h3>
-            <p>
-                <span class="en-only">A dropdown menu right in the Finder toolbar. One click to open the current folder in any app.</span>
-                <span class="zh-only">在 Finder 工具栏添加下拉菜单按钮，一键用任意应用打开当前文件夹。</span>
-            </p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">📋</div>
-            <h3>
-                <span class="en-only">Context Menu</span>
-                <span class="zh-only">右键菜单</span>
-            </h3>
-            <p>
-                <span class="en-only">Right-click on any folder and find OpenWith in the context menu. Works everywhere in Finder.</span>
-                <span class="zh-only">右键点击任意文件夹即可在菜单中找到 OpenWith，在 Finder 任何位置使用。</span>
-            </p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">⚡️</div>
-            <h3>
-                <span class="en-only">Smart Commands</span>
-                <span class="zh-only">智能命令</span>
-            </h3>
-            <p>
-                <span class="en-only">Auto-detects popular dev tools and generates optimal launch commands. Supports custom commands with %PATH%.</span>
-                <span class="zh-only">自动识别常用开发工具并生成最佳启动命令，支持通过 %PATH% 自定义命令。</span>
-            </p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">📎</div>
-            <h3>
-                <span class="en-only">Copy Path</span>
-                <span class="zh-only">复制路径</span>
-            </h3>
-            <p>
-                <span class="en-only">Quickly copy the current directory path to clipboard from the toolbar menu.</span>
-                <span class="zh-only">从工具栏菜单快速复制当前目录路径到剪贴板。</span>
-            </p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">🌐</div>
-            <h3>
-                <span class="en-only">21 Languages</span>
-                <span class="zh-only">21 种语言</span>
-            </h3>
-            <p>
-                <span class="en-only">Full localization in 21 languages including English, Chinese, Japanese, Korean, French, German, and more.</span>
-                <span class="zh-only">完整支持 21 种语言，包括中文、英文、日文、韩文、法文、德文等。</span>
-            </p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">🪶</div>
-            <h3>
-                <span class="en-only">Lightweight</span>
-                <span class="zh-only">轻量无后台</span>
-            </h3>
-            <p>
-                <span class="en-only">No background processes, no network requests, no tracking. Just a simple, fast Finder extension.</span>
-                <span class="zh-only">无后台进程、无网络请求、无数据追踪。简单、快速的 Finder 扩展。</span>
-            </p>
-        </div>
+<section class="section" id="screenshots">
+    <h2 data-i="ssTitle">Screenshots</h2>
+    <div class="ss"><div class="ss-row"><div class="ss-text"><h3 data-i="ss1t">Toolbar Menu</h3><p data-i="ss1d">Click the OpenWith button in the Finder toolbar to reveal a dropdown menu with all your configured apps.</p></div><div class="ss-img"><img id="img-toolbar" src="screenshots/en/en-toolbar.png" alt="Toolbar"></div></div></div>
+    <div class="ss"><div class="ss-row rev"><div class="ss-text"><h3 data-i="ss2t">Context Menu</h3><p data-i="ss2d">Right-click any folder to find OpenWith in the context menu. All your configured apps are just a click away.</p></div><div class="ss-img"><img id="img-context" src="screenshots/en/en-context.png" alt="Context menu"></div></div></div>
+    <div class="ss"><div class="ss-row"><div class="ss-text"><h3 data-i="ss3t">Add & Edit Apps</h3><p data-i="ss3d">Easily add new apps by selecting the .app file. Auto-detects name, icon, and generates the best launch command.</p></div><div class="ss-img"><img id="img-add" src="screenshots/en/en-add.png" alt="Add app"></div></div></div>
+    <div class="ss"><div class="ss-row rev"><div class="ss-text"><h3 data-i="ss4t">Settings</h3><p data-i="ss4d">Configure language preferences, learn how to enable the extension, and customize your experience.</p></div><div class="ss-img"><img id="img-settings" src="screenshots/en/en-settings.png" alt="Settings"></div></div></div>
+</section>
+
+<section class="section" id="guide">
+    <h2 data-i="guideTitle">Quick Setup</h2>
+    <div class="grid2">
+        <div class="step"><div class="step-n">1</div><h3 data-i="g1t">Add Your Apps</h3><p data-i="g1d">Open OpenWith and add the apps you want to use (Terminal, VS Code, iTerm2, etc.).</p></div>
+        <div class="step"><div class="step-n">2</div><h3 data-i="g2t">Enable Extension</h3><p data-i="g2d">Go to System Settings → Privacy & Security → Extensions → Added Extensions, and enable OpenWith.</p></div>
+        <div class="step"><div class="step-n">3</div><h3 data-i="g3t">Add to Toolbar</h3><p data-i="g3d">In Finder, right-click the toolbar → Customize Toolbar, then drag the OpenWith button to the toolbar.</p><img id="img-customize" src="screenshots/en/en-customize-toolbar.png" alt="Customize toolbar"></div>
+        <div class="step"><div class="step-n">4</div><h3 data-i="g4t">Start Using</h3><p data-i="g4d">Click the toolbar button or right-click a folder to open it in your favorite app!</p></div>
     </div>
 </section>
 
-<!-- Screenshots -->
-<section class="screenshots" id="screenshots">
-    <h2>
-        <span class="en-only">Screenshots</span>
-        <span class="zh-only">截图预览</span>
-    </h2>
-
-    <div class="screenshot-section">
-        <div class="screenshot-row">
-            <div class="screenshot-text">
-                <h3>
-                    <span class="en-only">Toolbar Menu</span>
-                    <span class="zh-only">工具栏菜单</span>
-                </h3>
-                <p>
-                    <span class="en-only">Click the OpenWith button in the Finder toolbar to reveal a dropdown menu with all your configured apps. Open any folder instantly.</span>
-                    <span class="zh-only">点击 Finder 工具栏中的 OpenWith 按钮，展开下拉菜单显示所有已配置的应用，即可快速打开当前文件夹。</span>
-                </p>
-            </div>
-            <div class="screenshot-img">
-                <img class="en-only" src="screenshots/en/en-toolbar.png" alt="Toolbar menu">
-                <img class="zh-only" src="screenshots/zh/zh-toolbar.png" alt="工具栏菜单">
-            </div>
-        </div>
-    </div>
-
-    <div class="screenshot-section">
-        <div class="screenshot-row reverse">
-            <div class="screenshot-text">
-                <h3>
-                    <span class="en-only">Context Menu</span>
-                    <span class="zh-only">右键菜单</span>
-                </h3>
-                <p>
-                    <span class="en-only">Right-click any folder to find OpenWith in the context menu. All your configured apps are just a click away.</span>
-                    <span class="zh-only">右键点击任意文件夹，在菜单中找到 OpenWith 子菜单，所有已配置的应用触手可及。</span>
-                </p>
-            </div>
-            <div class="screenshot-img">
-                <img class="en-only" src="screenshots/en/en-context.png" alt="Context menu">
-                <img class="zh-only" src="screenshots/zh/zh-context.png" alt="右键菜单">
-            </div>
-        </div>
-    </div>
-
-    <div class="screenshot-section">
-        <div class="screenshot-row">
-            <div class="screenshot-text">
-                <h3>
-                    <span class="en-only">Add & Edit Apps</span>
-                    <span class="zh-only">添加和编辑应用</span>
-                </h3>
-                <p>
-                    <span class="en-only">Easily add new apps by selecting the .app file. OpenWith auto-detects the app name, icon, and generates the best launch command.</span>
-                    <span class="zh-only">选择 .app 文件即可轻松添加新应用。OpenWith 自动识别应用名称、图标，并生成最佳启动命令。</span>
-                </p>
-            </div>
-            <div class="screenshot-img">
-                <img class="en-only" src="screenshots/en/en-add.png" alt="Add app">
-                <img class="zh-only" src="screenshots/zh/zh-add.png" alt="添加应用">
-            </div>
-        </div>
-    </div>
-
-    <div class="screenshot-section">
-        <div class="screenshot-row reverse">
-            <div class="screenshot-text">
-                <h3>
-                    <span class="en-only">Settings</span>
-                    <span class="zh-only">设置</span>
-                </h3>
-                <p>
-                    <span class="en-only">Configure language preferences, learn how to enable the extension, and customize your experience.</span>
-                    <span class="zh-only">配置语言偏好，了解如何启用扩展，自定义你的使用体验。</span>
-                </p>
-            </div>
-            <div class="screenshot-img">
-                <img class="en-only" src="screenshots/en/en-settings.png" alt="Settings">
-                <img class="zh-only" src="screenshots/zh/zh-settings.png" alt="设置">
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Setup Guide -->
-<section class="guide" id="guide">
-    <h2>
-        <span class="en-only">Quick Setup</span>
-        <span class="zh-only">快速设置</span>
-    </h2>
-    <div class="steps">
-        <div class="step">
-            <div class="step-number">1</div>
-            <h3>
-                <span class="en-only">Add Your Apps</span>
-                <span class="zh-only">添加应用</span>
-            </h3>
-            <p>
-                <span class="en-only">Open OpenWith and add the apps you want to use (Terminal, VS Code, iTerm2, etc.).</span>
-                <span class="zh-only">打开 OpenWith，添加你常用的应用（终端、VS Code、iTerm2 等）。</span>
-            </p>
-        </div>
-        <div class="step">
-            <div class="step-number">2</div>
-            <h3>
-                <span class="en-only">Enable Extension</span>
-                <span class="zh-only">启用扩展</span>
-            </h3>
-            <p>
-                <span class="en-only">Go to System Settings → Privacy & Security → Extensions → Added Extensions, and enable OpenWith.</span>
-                <span class="zh-only">前往系统设置 → 隐私与安全性 → 扩展 → 添加的扩展，启用 OpenWith。</span>
-            </p>
-        </div>
-        <div class="step">
-            <div class="step-number">3</div>
-            <h3>
-                <span class="en-only">Add to Toolbar</span>
-                <span class="zh-only">添加到工具栏</span>
-            </h3>
-            <p>
-                <span class="en-only">In Finder, right-click the toolbar → Customize Toolbar, then drag the OpenWith button to the toolbar.</span>
-                <span class="zh-only">在 Finder 中右键工具栏 → 自定义工具栏，将 OpenWith 按钮拖入工具栏。</span>
-            </p>
-            <img class="en-only" src="screenshots/en/en-customize-toolbar.png" alt="Customize toolbar">
-            <img class="zh-only" src="screenshots/zh/zh-customize-toolbar.png" alt="自定义工具栏">
-        </div>
-        <div class="step">
-            <div class="step-number">4</div>
-            <h3>
-                <span class="en-only">Start Using</span>
-                <span class="zh-only">开始使用</span>
-            </h3>
-            <p>
-                <span class="en-only">Click the toolbar button or right-click a folder to open it in your favorite app!</span>
-                <span class="zh-only">点击工具栏按钮或右键文件夹，即可用你喜欢的应用打开！</span>
-            </p>
-        </div>
-    </div>
-</section>
-
-<!-- Footer -->
 <footer>
     <div class="footer-inner">
-        <span>&copy; 2025 Teffy Apps. All rights reserved.</span>
-        <div class="footer-links">
-            <a href="privacy.html">
-                <span class="en-only">Privacy Policy</span>
-                <span class="zh-only">隐私政策</span>
-            </a>
-            <a href="mailto:lsmfeixiang@163.com">
-                <span class="en-only">Contact</span>
-                <span class="zh-only">联系我们</span>
-            </a>
-        </div>
+        <span>© 2025 Teffy Apps. All rights reserved.</span>
+        <div><a href="privacy.html" data-i="privacy">Privacy Policy</a><a href="mailto:lsmfeixiang@163.com" data-i="contact">Contact</a></div>
     </div>
 </footer>
 
 <script>
-    function setLang(lang) {
-        document.documentElement.lang = lang;
-        document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-        document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
-        localStorage.setItem('lang', lang);
-    }
+var I={
+en:{navFeatures:"Features",navScreenshots:"Screenshots",navSetup:"Setup",heroTitle:"Open Finder Folders in Any App",heroDesc:"Add a toolbar button or right-click menu to Finder, and instantly open any folder in Terminal, VS Code, iTerm2, or any app you choose.",featuresTitle:"Features",f1t:"Toolbar Button",f1d:"A dropdown menu right in the Finder toolbar. One click to open the current folder in any app.",f2t:"Context Menu",f2d:"Right-click on any folder and find OpenWith in the context menu. Works everywhere in Finder.",f3t:"Smart Commands",f3d:"Auto-detects popular dev tools and generates optimal launch commands. Supports custom commands with %PATH%.",f4t:"Copy Path",f4d:"Quickly copy the current directory path to clipboard from the toolbar menu.",f5t:"21 Languages",f5d:"Full localization in 21 languages including English, Chinese, Japanese, Korean, French, German, and more.",f6t:"Lightweight",f6d:"No background processes, no network requests, no tracking. Just a simple, fast Finder extension.",ssTitle:"Screenshots",ss1t:"Toolbar Menu",ss1d:"Click the OpenWith button in the Finder toolbar to reveal a dropdown menu with all your configured apps.",ss2t:"Context Menu",ss2d:"Right-click any folder to find OpenWith in the context menu. All your configured apps are just a click away.",ss3t:"Add & Edit Apps",ss3d:"Easily add new apps by selecting the .app file. Auto-detects name, icon, and generates the best launch command.",ss4t:"Settings",ss4d:"Configure language preferences, learn how to enable the extension, and customize your experience.",guideTitle:"Quick Setup",g1t:"Add Your Apps",g1d:"Open OpenWith and add the apps you want to use (Terminal, VS Code, iTerm2, etc.).",g2t:"Enable Extension",g2d:"Go to System Settings → Privacy & Security → Extensions → Added Extensions, and enable OpenWith.",g3t:"Add to Toolbar",g3d:"In Finder, right-click the toolbar → Customize Toolbar, then drag the OpenWith button to the toolbar.",g4t:"Start Using",g4d:"Click the toolbar button or right-click a folder to open it in your favorite app!",privacy:"Privacy Policy",contact:"Contact"},
+"zh-Hans":{navFeatures:"功能",navScreenshots:"截图",navSetup:"设置指南",heroTitle:"在 Finder 中一键打开任意应用",heroDesc:"在 Finder 工具栏添加按钮或使用右键菜单，即可快速用终端、VS Code、iTerm2 或任何应用打开文件夹。",featuresTitle:"功能特点",f1t:"工具栏按钮",f1d:"在 Finder 工具栏添加下拉菜单按钮，一键用任意应用打开当前文件夹。",f2t:"右键菜单",f2d:"右键点击任意文件夹即可在菜单中找到 OpenWith，在 Finder 任何位置使用。",f3t:"智能命令",f3d:"自动识别常用开发工具并生成最佳启动命令，支持通过 %PATH% 自定义命令。",f4t:"复制路径",f4d:"从工具栏菜单快速复制当前目录路径到剪贴板。",f5t:"21 种语言",f5d:"完整支持 21 种语言，包括中文、英文、日文、韩文、法文、德文等。",f6t:"轻量无后台",f6d:"无后台进程、无网络请求、无数据追踪。简单、快速的 Finder 扩展。",ssTitle:"截图预览",ss1t:"工具栏菜单",ss1d:"点击 Finder 工具栏中的 OpenWith 按钮，展开下拉菜单显示所有已配置的应用。",ss2t:"右键菜单",ss2d:"右键点击任意文件夹，在菜单中找到 OpenWith 子菜单，所有已配置的应用触手可及。",ss3t:"添加和编辑应用",ss3d:"选择 .app 文件即可轻松添加新应用。自动识别应用名称、图标，并生成最佳启动命令。",ss4t:"设置",ss4d:"配置语言偏好，了解如何启用扩展，自定义你的使用体验。",guideTitle:"快速设置",g1t:"添加应用",g1d:"打开 OpenWith，添加你常用的应用（终端、VS Code、iTerm2 等）。",g2t:"启用扩展",g2d:"前往系统设置 → 隐私与安全性 → 扩展 → 添加的扩展，启用 OpenWith。",g3t:"添加到工具栏",g3d:"在 Finder 中右键工具栏 → 自定义工具栏，将 OpenWith 按钮拖入工具栏。",g4t:"开始使用",g4d:"点击工具栏按钮或右键文件夹，即可用你喜欢的应用打开！",privacy:"隐私政策",contact:"联系我们"},
+"zh-Hant":{navFeatures:"功能",navScreenshots:"截圖",navSetup:"設定指南",heroTitle:"在 Finder 中一鍵開啟任意應用",heroDesc:"在 Finder 工具列新增按鈕或使用右鍵選單，即可快速用終端機、VS Code、iTerm2 或任何應用開啟資料夾。",featuresTitle:"功能特色",f1t:"工具列按鈕",f1d:"在 Finder 工具列新增下拉選單按鈕，一鍵用任意應用開啟當前資料夾。",f2t:"右鍵選單",f2d:"右鍵點擊任意資料夾即可在選單中找到 OpenWith，在 Finder 任何位置使用。",f3t:"智慧命令",f3d:"自動辨識常用開發工具並產生最佳啟動命令，支援透過 %PATH% 自訂命令。",f4t:"複製路徑",f4d:"從工具列選單快速複製當前目錄路徑到剪貼簿。",f5t:"21 種語言",f5d:"完整支援 21 種語言，包括中文、英文、日文、韓文、法文、德文等。",f6t:"輕量無背景",f6d:"無背景程序、無網路請求、無資料追蹤。簡單、快速的 Finder 延伸功能。",ssTitle:"截圖預覽",ss1t:"工具列選單",ss1d:"點擊 Finder 工具列中的 OpenWith 按鈕，展開下拉選單顯示所有已設定的應用。",ss2t:"右鍵選單",ss2d:"右鍵點擊任意資料夾，在選單中找到 OpenWith 子選單。",ss3t:"新增和編輯應用",ss3d:"選取 .app 檔案即可輕鬆新增應用。自動辨識名稱、圖示，並產生最佳啟動命令。",ss4t:"設定",ss4d:"設定語言偏好，了解如何啟用延伸功能，自訂使用體驗。",guideTitle:"快速設定",g1t:"新增應用",g1d:"開啟 OpenWith，新增常用的應用（終端機、VS Code、iTerm2 等）。",g2t:"啟用延伸功能",g2d:"前往系統設定 → 隱私權與安全性 → 延伸功能 → 已加入的延伸功能，啟用 OpenWith。",g3t:"新增至工具列",g3d:"在 Finder 中右鍵工具列 → 自訂工具列，將 OpenWith 按鈕拖入工具列。",g4t:"開始使用",g4d:"點擊工具列按鈕或右鍵資料夾，即可用喜愛的應用開啟！",privacy:"隱私權政策",contact:"聯絡我們"},
+ja:{navFeatures:"機能",navScreenshots:"スクリーンショット",navSetup:"セットアップ",heroTitle:"Finder フォルダを好きなアプリで開く",heroDesc:"Finder のツールバーボタンや右クリックメニューから、ターミナル、VS Code、iTerm2 など好きなアプリでフォルダを即座に開けます。",featuresTitle:"機能",f1t:"ツールバーボタン",f1d:"Finder ツールバーのドロップダウンメニューからワンクリックで現在のフォルダを開きます。",f2t:"コンテキストメニュー",f2d:"フォルダを右クリックするだけで OpenWith メニューが表示されます。",f3t:"スマートコマンド",f3d:"人気の開発ツールを自動検出し、最適な起動コマンドを生成。%PATH% でカスタムコマンドにも対応。",f4t:"パスをコピー",f4d:"ツールバーメニューから現在のディレクトリパスをクリップボードにすばやくコピー。",f5t:"21 言語対応",f5d:"英語、中国語、日本語、韓国語、フランス語、ドイツ語など 21 言語を完全サポート。",f6t:"軽量設計",f6d:"バックグラウンドプロセスなし、ネットワーク通信なし、トラッキングなし。シンプルで高速な Finder 拡張機能。",ssTitle:"スクリーンショット",ss1t:"ツールバーメニュー",ss1d:"Finder ツールバーの OpenWith ボタンをクリックすると、設定済みアプリのドロップダウンメニューが表示されます。",ss2t:"コンテキストメニュー",ss2d:"フォルダを右クリックして OpenWith サブメニューからアプリを選択できます。",ss3t:"アプリの追加・編集",ss3d:".app ファイルを選択するだけで簡単に追加。名前、アイコン、起動コマンドを自動検出します。",ss4t:"設定",ss4d:"言語設定、拡張機能の有効化方法、カスタマイズオプションを確認できます。",guideTitle:"クイックセットアップ",g1t:"アプリを追加",g1d:"OpenWith を開き、使いたいアプリ（ターミナル、VS Code、iTerm2 など）を追加します。",g2t:"拡張機能を有効化",g2d:"システム設定 → プライバシーとセキュリティ → 機能拡張 → 追加済みの機能拡張で OpenWith を有効にします。",g3t:"ツールバーに追加",g3d:"Finder でツールバーを右クリック → ツールバーをカスタマイズから OpenWith ボタンをドラッグします。",g4t:"使い始める",g4d:"ツールバーボタンをクリック、またはフォルダを右クリックして好きなアプリで開きましょう！",privacy:"プライバシーポリシー",contact:"お問い合わせ"},
+ko:{navFeatures:"기능",navScreenshots:"스크린샷",navSetup:"설정",heroTitle:"Finder 폴더를 원하는 앱으로 열기",heroDesc:"Finder 도구 막대 버튼이나 우클릭 메뉴를 통해 터미널, VS Code, iTerm2 등 원하는 앱으로 폴더를 바로 열 수 있습니다.",featuresTitle:"기능",f1t:"도구 막대 버튼",f1d:"Finder 도구 막대의 드롭다운 메뉴로 한 번의 클릭으로 현재 폴더를 열 수 있습니다.",f2t:"컨텍스트 메뉴",f2d:"폴더를 우클릭하면 OpenWith 메뉴를 찾을 수 있습니다.",f3t:"스마트 명령",f3d:"인기 개발 도구를 자동 감지하고 최적의 실행 명령을 생성합니다. %PATH%로 사용자 정의 명령도 지원합니다.",f4t:"경로 복사",f4d:"도구 막대 메뉴에서 현재 디렉토리 경로를 클립보드에 빠르게 복사합니다.",f5t:"21개 언어",f5d:"영어, 중국어, 일본어, 한국어, 프랑스어, 독일어 등 21개 언어를 완벽 지원합니다.",f6t:"가벼운 설계",f6d:"백그라운드 프로세스 없음, 네트워크 요청 없음, 추적 없음. 간단하고 빠른 Finder 확장 프로그램.",ssTitle:"스크린샷",ss1t:"도구 막대 메뉴",ss1d:"Finder 도구 막대의 OpenWith 버튼을 클릭하면 구성된 앱의 드롭다운 메뉴가 나타납니다.",ss2t:"컨텍스트 메뉴",ss2d:"폴더를 우클릭하여 OpenWith 하위 메뉴에서 앱을 선택할 수 있습니다.",ss3t:"앱 추가 및 편집",ss3d:".app 파일을 선택하면 간편하게 추가됩니다. 이름, 아이콘, 실행 명령을 자동으로 감지합니다.",ss4t:"설정",ss4d:"언어 설정, 확장 프로그램 활성화 방법 등을 확인할 수 있습니다.",guideTitle:"빠른 설정",g1t:"앱 추가",g1d:"OpenWith를 열고 사용할 앱(터미널, VS Code, iTerm2 등)을 추가합니다.",g2t:"확장 프로그램 활성화",g2d:"시스템 설정 → 개인정보 보호 및 보안 → 확장 프로그램 → 추가된 확장 프로그램에서 OpenWith를 활성화합니다.",g3t:"도구 막대에 추가",g3d:"Finder에서 도구 막대 우클릭 → 도구 막대 사용자화에서 OpenWith 버튼을 드래그합니다.",g4t:"사용 시작",g4d:"도구 막대 버튼을 클릭하거나 폴더를 우클릭하여 원하는 앱으로 열어보세요!",privacy:"개인정보 처리방침",contact:"문의"},
+fr:{navFeatures:"Fonctionnalités",navScreenshots:"Captures d'écran",navSetup:"Configuration",heroTitle:"Ouvrez les dossiers Finder dans n'importe quelle app",heroDesc:"Ajoutez un bouton dans la barre d'outils ou un menu contextuel au Finder pour ouvrir instantanément n'importe quel dossier dans Terminal, VS Code, iTerm2 ou l'app de votre choix.",featuresTitle:"Fonctionnalités",f1t:"Bouton de barre d'outils",f1d:"Un menu déroulant dans la barre d'outils du Finder. Un clic pour ouvrir le dossier courant dans n'importe quelle app.",f2t:"Menu contextuel",f2d:"Cliquez droit sur n'importe quel dossier et trouvez OpenWith dans le menu contextuel.",f3t:"Commandes intelligentes",f3d:"Détecte automatiquement les outils de développement populaires et génère les commandes optimales. Supporte les commandes personnalisées avec %PATH%.",f4t:"Copier le chemin",f4d:"Copiez rapidement le chemin du répertoire courant dans le presse-papiers depuis le menu de la barre d'outils.",f5t:"21 langues",f5d:"Localisation complète en 21 langues dont l'anglais, le chinois, le japonais, le coréen, le français, l'allemand, et plus.",f6t:"Léger",f6d:"Aucun processus en arrière-plan, aucune requête réseau, aucun suivi. Une extension Finder simple et rapide.",ssTitle:"Captures d'écran",ss1t:"Menu de la barre d'outils",ss1d:"Cliquez sur le bouton OpenWith dans la barre d'outils du Finder pour afficher le menu déroulant avec toutes vos apps configurées.",ss2t:"Menu contextuel",ss2d:"Cliquez droit sur n'importe quel dossier pour trouver le sous-menu OpenWith.",ss3t:"Ajouter et modifier des apps",ss3d:"Sélectionnez simplement le fichier .app pour ajouter une app. Détection automatique du nom, de l'icône et de la commande de lancement.",ss4t:"Paramètres",ss4d:"Configurez les préférences de langue, apprenez à activer l'extension et personnalisez votre expérience.",guideTitle:"Configuration rapide",g1t:"Ajoutez vos apps",g1d:"Ouvrez OpenWith et ajoutez les apps que vous souhaitez utiliser (Terminal, VS Code, iTerm2, etc.).",g2t:"Activez l'extension",g2d:"Allez dans Réglages système → Confidentialité et sécurité → Extensions → Extensions ajoutées, et activez OpenWith.",g3t:"Ajoutez à la barre d'outils",g3d:"Dans le Finder, cliquez droit sur la barre d'outils → Personnaliser la barre d'outils, puis glissez le bouton OpenWith.",g4t:"Commencez à utiliser",g4d:"Cliquez sur le bouton de la barre d'outils ou faites un clic droit sur un dossier pour l'ouvrir dans votre app préférée !",privacy:"Politique de confidentialité",contact:"Contact"},
+de:{navFeatures:"Funktionen",navScreenshots:"Screenshots",navSetup:"Einrichtung",heroTitle:"Finder-Ordner in jeder App öffnen",heroDesc:"Fügen Sie eine Symbolleisten-Schaltfläche oder ein Rechtsklick-Menü zum Finder hinzu und öffnen Sie sofort jeden Ordner in Terminal, VS Code, iTerm2 oder einer beliebigen App.",featuresTitle:"Funktionen",f1t:"Symbolleisten-Button",f1d:"Ein Dropdown-Menü direkt in der Finder-Symbolleiste. Ein Klick, um den aktuellen Ordner in jeder App zu öffnen.",f2t:"Kontextmenü",f2d:"Rechtsklicken Sie auf einen Ordner und finden Sie OpenWith im Kontextmenü.",f3t:"Intelligente Befehle",f3d:"Erkennt automatisch beliebte Entwicklungstools und generiert optimale Startbefehle. Unterstützt benutzerdefinierte Befehle mit %PATH%.",f4t:"Pfad kopieren",f4d:"Kopieren Sie schnell den aktuellen Verzeichnispfad in die Zwischenablage über das Symbolleisten-Menü.",f5t:"21 Sprachen",f5d:"Vollständige Lokalisierung in 21 Sprachen einschließlich Englisch, Chinesisch, Japanisch, Koreanisch, Französisch, Deutsch und mehr.",f6t:"Leichtgewichtig",f6d:"Keine Hintergrundprozesse, keine Netzwerkanfragen, kein Tracking. Eine einfache, schnelle Finder-Erweiterung.",ssTitle:"Screenshots",ss1t:"Symbolleisten-Menü",ss1d:"Klicken Sie auf den OpenWith-Button in der Finder-Symbolleiste, um das Dropdown-Menü mit allen konfigurierten Apps anzuzeigen.",ss2t:"Kontextmenü",ss2d:"Rechtsklicken Sie auf einen Ordner, um das OpenWith-Untermenü zu finden.",ss3t:"Apps hinzufügen & bearbeiten",ss3d:"Wählen Sie einfach die .app-Datei aus. Name, Symbol und Startbefehl werden automatisch erkannt.",ss4t:"Einstellungen",ss4d:"Konfigurieren Sie Spracheinstellungen, erfahren Sie, wie Sie die Erweiterung aktivieren, und passen Sie Ihre Erfahrung an.",guideTitle:"Schnelleinrichtung",g1t:"Apps hinzufügen",g1d:"Öffnen Sie OpenWith und fügen Sie die gewünschten Apps hinzu (Terminal, VS Code, iTerm2, usw.).",g2t:"Erweiterung aktivieren",g2d:"Gehen Sie zu Systemeinstellungen → Datenschutz & Sicherheit → Erweiterungen → Hinzugefügte Erweiterungen und aktivieren Sie OpenWith.",g3t:"Zur Symbolleiste hinzufügen",g3d:"Im Finder Rechtsklick auf die Symbolleiste → Symbolleiste anpassen, dann den OpenWith-Button ziehen.",g4t:"Loslegen",g4d:"Klicken Sie auf den Symbolleisten-Button oder rechtsklicken Sie auf einen Ordner, um ihn in Ihrer Lieblings-App zu öffnen!",privacy:"Datenschutzrichtlinie",contact:"Kontakt"},
+es:{navFeatures:"Características",navScreenshots:"Capturas",navSetup:"Configuración",heroTitle:"Abre carpetas del Finder en cualquier app",heroDesc:"Añade un botón en la barra de herramientas o un menú contextual al Finder para abrir cualquier carpeta en Terminal, VS Code, iTerm2 o la app que prefieras.",featuresTitle:"Características",f1t:"Botón de barra de herramientas",f1d:"Un menú desplegable en la barra de herramientas del Finder. Un clic para abrir la carpeta actual en cualquier app.",f2t:"Menú contextual",f2d:"Haz clic derecho en cualquier carpeta y encuentra OpenWith en el menú contextual.",f3t:"Comandos inteligentes",f3d:"Detecta automáticamente herramientas de desarrollo populares y genera comandos óptimos. Soporta comandos personalizados con %PATH%.",f4t:"Copiar ruta",f4d:"Copia rápidamente la ruta del directorio actual al portapapeles desde el menú de la barra de herramientas.",f5t:"21 idiomas",f5d:"Localización completa en 21 idiomas incluyendo inglés, chino, japonés, coreano, francés, alemán y más.",f6t:"Ligero",f6d:"Sin procesos en segundo plano, sin solicitudes de red, sin seguimiento. Una extensión de Finder simple y rápida.",ssTitle:"Capturas de pantalla",ss1t:"Menú de barra de herramientas",ss1d:"Haz clic en el botón OpenWith en la barra de herramientas del Finder para ver el menú desplegable con todas tus apps configuradas.",ss2t:"Menú contextual",ss2d:"Haz clic derecho en cualquier carpeta para encontrar el submenú de OpenWith.",ss3t:"Añadir y editar apps",ss3d:"Selecciona el archivo .app para añadir fácilmente. Detecta automáticamente nombre, icono y comando de lanzamiento.",ss4t:"Ajustes",ss4d:"Configura las preferencias de idioma, aprende a activar la extensión y personaliza tu experiencia.",guideTitle:"Configuración rápida",g1t:"Añade tus apps",g1d:"Abre OpenWith y añade las apps que quieras usar (Terminal, VS Code, iTerm2, etc.).",g2t:"Activa la extensión",g2d:"Ve a Ajustes del sistema → Privacidad y seguridad → Extensiones → Extensiones añadidas y activa OpenWith.",g3t:"Añadir a la barra de herramientas",g3d:"En el Finder, haz clic derecho en la barra → Personalizar barra de herramientas, luego arrastra el botón OpenWith.",g4t:"Empezar a usar",g4d:"¡Haz clic en el botón de la barra o clic derecho en una carpeta para abrirla en tu app favorita!",privacy:"Política de privacidad",contact:"Contacto"},
+"pt-BR":{navFeatures:"Recursos",navScreenshots:"Capturas de tela",navSetup:"Configuração",heroTitle:"Abra pastas do Finder em qualquer app",heroDesc:"Adicione um botão na barra de ferramentas ou menu de contexto ao Finder para abrir qualquer pasta no Terminal, VS Code, iTerm2 ou qualquer app de sua escolha.",featuresTitle:"Recursos",f1t:"Botão na barra de ferramentas",f1d:"Um menu suspenso na barra de ferramentas do Finder. Um clique para abrir a pasta atual em qualquer app.",f2t:"Menu de contexto",f2d:"Clique com o botão direito em qualquer pasta e encontre o OpenWith no menu de contexto.",f3t:"Comandos inteligentes",f3d:"Detecta automaticamente ferramentas de desenvolvimento populares e gera comandos de lançamento ideais. Suporta comandos personalizados com %PATH%.",f4t:"Copiar caminho",f4d:"Copie rapidamente o caminho do diretório atual para a área de transferência pelo menu da barra de ferramentas.",f5t:"21 idiomas",f5d:"Localização completa em 21 idiomas incluindo inglês, chinês, japonês, coreano, francês, alemão e mais.",f6t:"Leve",f6d:"Sem processos em segundo plano, sem requisições de rede, sem rastreamento. Uma extensão do Finder simples e rápida.",ssTitle:"Capturas de tela",ss1t:"Menu da barra de ferramentas",ss1d:"Clique no botão OpenWith na barra de ferramentas do Finder para revelar o menu suspenso com todos os seus apps configurados.",ss2t:"Menu de contexto",ss2d:"Clique com o botão direito em qualquer pasta para encontrar o submenu do OpenWith.",ss3t:"Adicionar e editar apps",ss3d:"Selecione o arquivo .app para adicionar facilmente. Detecta automaticamente nome, ícone e comando de lançamento.",ss4t:"Configurações",ss4d:"Configure preferências de idioma, aprenda a ativar a extensão e personalize sua experiência.",guideTitle:"Configuração rápida",g1t:"Adicione seus apps",g1d:"Abra o OpenWith e adicione os apps que deseja usar (Terminal, VS Code, iTerm2, etc.).",g2t:"Ative a extensão",g2d:"Vá em Ajustes do Sistema → Privacidade e Segurança → Extensões → Extensões Adicionadas e ative o OpenWith.",g3t:"Adicionar à barra de ferramentas",g3d:"No Finder, clique com o botão direito na barra → Personalizar Barra de Ferramentas, arraste o botão OpenWith.",g4t:"Começar a usar",g4d:"Clique no botão da barra ou clique com o botão direito em uma pasta para abri-la no seu app favorito!",privacy:"Política de Privacidade",contact:"Contato"},
+it:{navFeatures:"Funzionalità",navScreenshots:"Screenshot",navSetup:"Configurazione",heroTitle:"Apri le cartelle del Finder in qualsiasi app",heroDesc:"Aggiungi un pulsante nella barra degli strumenti o un menu contestuale al Finder per aprire qualsiasi cartella in Terminale, VS Code, iTerm2 o l'app che preferisci.",featuresTitle:"Funzionalità",f1t:"Pulsante barra strumenti",f1d:"Un menu a tendina nella barra degli strumenti del Finder. Un clic per aprire la cartella corrente in qualsiasi app.",f2t:"Menu contestuale",f2d:"Fai clic destro su qualsiasi cartella e trova OpenWith nel menu contestuale.",f3t:"Comandi intelligenti",f3d:"Rileva automaticamente gli strumenti di sviluppo più diffusi e genera comandi di avvio ottimali. Supporta comandi personalizzati con %PATH%.",f4t:"Copia percorso",f4d:"Copia rapidamente il percorso della directory corrente negli appunti dal menu della barra degli strumenti.",f5t:"21 lingue",f5d:"Localizzazione completa in 21 lingue tra cui inglese, cinese, giapponese, coreano, francese, tedesco e altre.",f6t:"Leggero",f6d:"Nessun processo in background, nessuna richiesta di rete, nessun tracciamento. Un'estensione Finder semplice e veloce.",ssTitle:"Screenshot",ss1t:"Menu barra strumenti",ss1d:"Fai clic sul pulsante OpenWith nella barra degli strumenti del Finder per visualizzare il menu a tendina con tutte le app configurate.",ss2t:"Menu contestuale",ss2d:"Fai clic destro su qualsiasi cartella per trovare il sottomenu OpenWith.",ss3t:"Aggiungi e modifica app",ss3d:"Seleziona il file .app per aggiungere facilmente. Rileva automaticamente nome, icona e comando di avvio.",ss4t:"Impostazioni",ss4d:"Configura le preferenze di lingua, scopri come attivare l'estensione e personalizza la tua esperienza.",guideTitle:"Configurazione rapida",g1t:"Aggiungi le tue app",g1d:"Apri OpenWith e aggiungi le app che vuoi usare (Terminale, VS Code, iTerm2, ecc.).",g2t:"Attiva l'estensione",g2d:"Vai in Impostazioni di Sistema → Privacy e Sicurezza → Estensioni → Estensioni aggiunte e attiva OpenWith.",g3t:"Aggiungi alla barra strumenti",g3d:"Nel Finder, clic destro sulla barra → Personalizza barra degli strumenti, trascina il pulsante OpenWith.",g4t:"Inizia a usare",g4d:"Fai clic sul pulsante della barra o clic destro su una cartella per aprirla nella tua app preferita!",privacy:"Informativa sulla privacy",contact:"Contatti"},
+nl:{navFeatures:"Functies",navScreenshots:"Schermafbeeldingen",navSetup:"Instellen",heroTitle:"Open Finder-mappen in elke app",heroDesc:"Voeg een werkbalkknop of rechtermuisknopmenu toe aan Finder en open direct elke map in Terminal, VS Code, iTerm2 of een app naar keuze.",featuresTitle:"Functies",f1t:"Werkbalkknop",f1d:"Een vervolgkeuzemenu in de Finder-werkbalk. Eén klik om de huidige map in elke app te openen.",f2t:"Contextmenu",f2d:"Klik met de rechtermuisknop op een map en vind OpenWith in het contextmenu.",f3t:"Slimme opdrachten",f3d:"Detecteert automatisch populaire ontwikkeltools en genereert optimale startopdrachten. Ondersteunt aangepaste opdrachten met %PATH%.",f4t:"Pad kopiëren",f4d:"Kopieer snel het pad van de huidige map naar het klembord via het werkbalkmenu.",f5t:"21 talen",f5d:"Volledige lokalisatie in 21 talen waaronder Engels, Chinees, Japans, Koreaans, Frans, Duits en meer.",f6t:"Lichtgewicht",f6d:"Geen achtergrondprocessen, geen netwerkverzoeken, geen tracking. Een eenvoudige, snelle Finder-extensie.",ssTitle:"Schermafbeeldingen",ss1t:"Werkbalkmenu",ss1d:"Klik op de OpenWith-knop in de Finder-werkbalk om het vervolgkeuzemenu met al je geconfigureerde apps te tonen.",ss2t:"Contextmenu",ss2d:"Klik met de rechtermuisknop op een map om het OpenWith-submenu te vinden.",ss3t:"Apps toevoegen en bewerken",ss3d:"Selecteer het .app-bestand om eenvoudig toe te voegen. Naam, pictogram en startopdracht worden automatisch gedetecteerd.",ss4t:"Instellingen",ss4d:"Configureer taalvoorkeuren, leer hoe je de extensie activeert en pas je ervaring aan.",guideTitle:"Snel instellen",g1t:"Voeg je apps toe",g1d:"Open OpenWith en voeg de apps toe die je wilt gebruiken (Terminal, VS Code, iTerm2, enz.).",g2t:"Activeer extensie",g2d:"Ga naar Systeeminstellingen → Privacy en beveiliging → Extensies → Toegevoegde extensies en schakel OpenWith in.",g3t:"Toevoegen aan werkbalk",g3d:"In Finder, klik rechts op de werkbalk → Pas werkbalk aan, sleep vervolgens de OpenWith-knop.",g4t:"Begin met gebruiken",g4d:"Klik op de werkbalkknop of klik rechts op een map om deze in je favoriete app te openen!",privacy:"Privacybeleid",contact:"Contact"},
+pl:{navFeatures:"Funkcje",navScreenshots:"Zrzuty ekranu",navSetup:"Konfiguracja",heroTitle:"Otwieraj foldery Findera w dowolnej aplikacji",heroDesc:"Dodaj przycisk na pasku narzędzi lub menu kontekstowe do Findera i natychmiast otwieraj foldery w Terminalu, VS Code, iTerm2 lub dowolnej aplikacji.",featuresTitle:"Funkcje",f1t:"Przycisk paska narzędzi",f1d:"Menu rozwijane na pasku narzędzi Findera. Jedno kliknięcie, aby otworzyć folder w dowolnej aplikacji.",f2t:"Menu kontekstowe",f2d:"Kliknij prawym przyciskiem na folder i znajdź OpenWith w menu kontekstowym.",f3t:"Inteligentne komendy",f3d:"Automatycznie wykrywa popularne narzędzia deweloperskie i generuje optymalne komendy. Obsługuje niestandardowe komendy z %PATH%.",f4t:"Kopiuj ścieżkę",f4d:"Szybko skopiuj ścieżkę bieżącego katalogu do schowka z menu paska narzędzi.",f5t:"21 języków",f5d:"Pełna lokalizacja w 21 językach, w tym angielski, chiński, japoński, koreański, francuski, niemiecki i inne.",f6t:"Lekki",f6d:"Brak procesów w tle, brak żądań sieciowych, brak śledzenia. Proste, szybkie rozszerzenie Findera.",ssTitle:"Zrzuty ekranu",ss1t:"Menu paska narzędzi",ss1d:"Kliknij przycisk OpenWith na pasku narzędzi Findera, aby wyświetlić menu z wszystkimi skonfigurowanymi aplikacjami.",ss2t:"Menu kontekstowe",ss2d:"Kliknij prawym przyciskiem na folder, aby znaleźć podmenu OpenWith.",ss3t:"Dodaj i edytuj aplikacje",ss3d:"Wybierz plik .app, aby łatwo dodać. Automatycznie wykrywa nazwę, ikonę i komendę uruchomienia.",ss4t:"Ustawienia",ss4d:"Skonfiguruj preferencje językowe, dowiedz się jak aktywować rozszerzenie i dostosuj swoje doświadczenie.",guideTitle:"Szybka konfiguracja",g1t:"Dodaj aplikacje",g1d:"Otwórz OpenWith i dodaj aplikacje, których chcesz używać (Terminal, VS Code, iTerm2 itp.).",g2t:"Aktywuj rozszerzenie",g2d:"Przejdź do Ustawienia systemowe → Prywatność i bezpieczeństwo → Rozszerzenia → Dodane rozszerzenia i włącz OpenWith.",g3t:"Dodaj do paska narzędzi",g3d:"W Finderze kliknij prawym na pasek → Dostosuj pasek narzędzi, przeciągnij przycisk OpenWith.",g4t:"Zacznij używać",g4d:"Kliknij przycisk na pasku lub kliknij prawym na folder, aby otworzyć go w ulubionej aplikacji!",privacy:"Polityka prywatności",contact:"Kontakt"},
+ru:{navFeatures:"Функции",navScreenshots:"Скриншоты",navSetup:"Настройка",heroTitle:"Открывайте папки Finder в любом приложении",heroDesc:"Добавьте кнопку на панель инструментов или контекстное меню в Finder и мгновенно открывайте папки в Terminal, VS Code, iTerm2 или любом приложении.",featuresTitle:"Функции",f1t:"Кнопка панели инструментов",f1d:"Выпадающее меню на панели инструментов Finder. Один клик, чтобы открыть папку в любом приложении.",f2t:"Контекстное меню",f2d:"Щёлкните правой кнопкой по папке и найдите OpenWith в контекстном меню.",f3t:"Умные команды",f3d:"Автоматически определяет популярные инструменты разработки и генерирует оптимальные команды запуска. Поддержка пользовательских команд с %PATH%.",f4t:"Копировать путь",f4d:"Быстро скопируйте путь текущего каталога в буфер обмена из меню панели инструментов.",f5t:"21 язык",f5d:"Полная локализация на 21 языке, включая английский, китайский, японский, корейский, французский, немецкий и другие.",f6t:"Лёгкий",f6d:"Без фоновых процессов, без сетевых запросов, без отслеживания. Простое и быстрое расширение Finder.",ssTitle:"Скриншоты",ss1t:"Меню панели инструментов",ss1d:"Нажмите кнопку OpenWith на панели инструментов Finder, чтобы открыть выпадающее меню со всеми настроенными приложениями.",ss2t:"Контекстное меню",ss2d:"Щёлкните правой кнопкой по папке, чтобы найти подменю OpenWith.",ss3t:"Добавление и редактирование",ss3d:"Выберите файл .app для лёгкого добавления. Автоматическое определение названия, значка и команды запуска.",ss4t:"Настройки",ss4d:"Настройте языковые предпочтения, узнайте, как активировать расширение, и настройте свой опыт.",guideTitle:"Быстрая настройка",g1t:"Добавьте приложения",g1d:"Откройте OpenWith и добавьте приложения, которые хотите использовать (Terminal, VS Code, iTerm2 и т.д.).",g2t:"Активируйте расширение",g2d:"Перейдите в Системные настройки → Конфиденциальность и безопасность → Расширения → Добавленные расширения и включите OpenWith.",g3t:"Добавьте на панель",g3d:"В Finder щёлкните правой кнопкой по панели → Настроить панель инструментов, перетащите кнопку OpenWith.",g4t:"Начните использовать",g4d:"Нажмите кнопку на панели или щёлкните правой кнопкой по папке, чтобы открыть её в любимом приложении!",privacy:"Политика конфиденциальности",contact:"Контакты"},
+tr:{navFeatures:"Özellikler",navScreenshots:"Ekran Görüntüleri",navSetup:"Kurulum",heroTitle:"Finder klasörlerini istediğiniz uygulamada açın",heroDesc:"Finder araç çubuğuna bir düğme veya sağ tıklama menüsü ekleyin ve Terminal, VS Code, iTerm2 veya istediğiniz uygulamada klasörleri anında açın.",featuresTitle:"Özellikler",f1t:"Araç çubuğu düğmesi",f1d:"Finder araç çubuğunda açılır menü. Tek tıkla mevcut klasörü herhangi bir uygulamada açın.",f2t:"Bağlam menüsü",f2d:"Herhangi bir klasöre sağ tıklayın ve bağlam menüsünde OpenWith'i bulun.",f3t:"Akıllı komutlar",f3d:"Popüler geliştirme araçlarını otomatik algılar ve optimal başlatma komutları oluşturur. %PATH% ile özel komutları destekler.",f4t:"Yolu kopyala",f4d:"Araç çubuğu menüsünden mevcut dizin yolunu panoya hızlıca kopyalayın.",f5t:"21 dil",f5d:"İngilizce, Çince, Japonca, Korece, Fransızca, Almanca ve daha fazlası dahil 21 dilde tam yerelleştirme.",f6t:"Hafif",f6d:"Arka plan işlemi yok, ağ isteği yok, izleme yok. Basit ve hızlı bir Finder uzantısı.",ssTitle:"Ekran Görüntüleri",ss1t:"Araç çubuğu menüsü",ss1d:"Finder araç çubuğundaki OpenWith düğmesine tıklayarak yapılandırılmış uygulamalarınızın açılır menüsünü görüntüleyin.",ss2t:"Bağlam menüsü",ss2d:"Herhangi bir klasöre sağ tıklayarak OpenWith alt menüsünü bulun.",ss3t:"Uygulama ekle ve düzenle",ss3d:".app dosyasını seçerek kolayca ekleyin. Ad, simge ve başlatma komutu otomatik algılanır.",ss4t:"Ayarlar",ss4d:"Dil tercihlerini yapılandırın, uzantıyı nasıl etkinleştireceğinizi öğrenin ve deneyiminizi özelleştirin.",guideTitle:"Hızlı kurulum",g1t:"Uygulamalarınızı ekleyin",g1d:"OpenWith'i açın ve kullanmak istediğiniz uygulamaları ekleyin (Terminal, VS Code, iTerm2, vb.).",g2t:"Uzantıyı etkinleştirin",g2d:"Sistem Ayarları → Gizlilik ve Güvenlik → Uzantılar → Eklenen Uzantılar'a gidin ve OpenWith'i etkinleştirin.",g3t:"Araç çubuğuna ekleyin",g3d:"Finder'da araç çubuğuna sağ tıklayın → Araç Çubuğunu Özelleştir, OpenWith düğmesini sürükleyin.",g4t:"Kullanmaya başlayın",g4d:"Araç çubuğu düğmesine tıklayın veya bir klasöre sağ tıklayarak favori uygulamanızda açın!",privacy:"Gizlilik Politikası",contact:"İletişim"},
+th:{navFeatures:"คุณสมบัติ",navScreenshots:"ภาพหน้าจอ",navSetup:"ตั้งค่า",heroTitle:"เปิดโฟลเดอร์ Finder ในแอปที่คุณต้องการ",heroDesc:"เพิ่มปุ่มแถบเครื่องมือหรือเมนูคลิกขวาใน Finder เพื่อเปิดโฟลเดอร์ใน Terminal, VS Code, iTerm2 หรือแอปใดก็ได้ทันที",featuresTitle:"คุณสมบัติ",f1t:"ปุ่มแถบเครื่องมือ",f1d:"เมนูดรอปดาวน์ในแถบเครื่องมือ Finder คลิกเดียวเพื่อเปิดโฟลเดอร์ปัจจุบันในแอปใดก็ได้",f2t:"เมนูคลิกขวา",f2d:"คลิกขวาที่โฟลเดอร์ใดก็ได้แล้วหา OpenWith ในเมนู",f3t:"คำสั่งอัจฉริยะ",f3d:"ตรวจจับเครื่องมือพัฒนายอดนิยมโดยอัตโนมัติและสร้างคำสั่งเปิดที่เหมาะสม รองรับคำสั่งกำหนดเองด้วย %PATH%",f4t:"คัดลอกพาธ",f4d:"คัดลอกพาธไดเรกทอรีปัจจุบันไปยังคลิปบอร์ดอย่างรวดเร็วจากเมนูแถบเครื่องมือ",f5t:"21 ภาษา",f5d:"รองรับ 21 ภาษาเต็มรูปแบบ รวมถึงอังกฤษ จีน ญี่ปุ่น เกาหลี ฝรั่งเศส เยอรมัน และอื่นๆ",f6t:"เบาและเร็ว",f6d:"ไม่มีโปรเซสพื้นหลัง ไม่มีคำขอเครือข่าย ไม่มีการติดตาม ส่วนขยาย Finder ที่เรียบง่ายและรวดเร็ว",ssTitle:"ภาพหน้าจอ",ss1t:"เมนูแถบเครื่องมือ",ss1d:"คลิกปุ่ม OpenWith ในแถบเครื่องมือ Finder เพื่อแสดงเมนูดรอปดาวน์ของแอปที่กำหนดค่าไว้",ss2t:"เมนูคลิกขวา",ss2d:"คลิกขวาที่โฟลเดอร์เพื่อหาเมนูย่อย OpenWith",ss3t:"เพิ่มและแก้ไขแอป",ss3d:"เลือกไฟล์ .app เพื่อเพิ่มอย่างง่ายดาย ตรวจจับชื่อ ไอคอน และคำสั่งเปิดโดยอัตโนมัติ",ss4t:"การตั้งค่า",ss4d:"กำหนดค่าภาษา เรียนรู้วิธีเปิดใช้งานส่วนขยาย และปรับแต่งประสบการณ์ของคุณ",guideTitle:"ตั้งค่าด่วน",g1t:"เพิ่มแอป",g1d:"เปิด OpenWith แล้วเพิ่มแอปที่ต้องการใช้ (Terminal, VS Code, iTerm2 ฯลฯ)",g2t:"เปิดใช้งานส่วนขยาย",g2d:"ไปที่การตั้งค่าระบบ → ความเป็นส่วนตัวและความปลอดภัย → ส่วนขยาย → ส่วนขยายที่เพิ่ม แล้วเปิดใช้ OpenWith",g3t:"เพิ่มลงแถบเครื่องมือ",g3d:"ใน Finder คลิกขวาที่แถบเครื่องมือ → ปรับแต่งแถบเครื่องมือ แล้วลากปุ่ม OpenWith",g4t:"เริ่มใช้งาน",g4d:"คลิกปุ่มแถบเครื่องมือหรือคลิกขวาที่โฟลเดอร์เพื่อเปิดในแอปที่ชอบ!",privacy:"นโยบายความเป็นส่วนตัว",contact:"ติดต่อ"},
+vi:{navFeatures:"Tính năng",navScreenshots:"Ảnh chụp màn hình",navSetup:"Thiết lập",heroTitle:"Mở thư mục Finder trong bất kỳ ứng dụng nào",heroDesc:"Thêm nút thanh công cụ hoặc menu chuột phải vào Finder để mở ngay thư mục trong Terminal, VS Code, iTerm2 hoặc ứng dụng bất kỳ.",featuresTitle:"Tính năng",f1t:"Nút thanh công cụ",f1d:"Menu thả xuống ngay trên thanh công cụ Finder. Một cú nhấp để mở thư mục hiện tại trong bất kỳ ứng dụng nào.",f2t:"Menu chuột phải",f2d:"Nhấp chuột phải vào thư mục bất kỳ và tìm OpenWith trong menu ngữ cảnh.",f3t:"Lệnh thông minh",f3d:"Tự động phát hiện các công cụ phát triển phổ biến và tạo lệnh khởi chạy tối ưu. Hỗ trợ lệnh tùy chỉnh với %PATH%.",f4t:"Sao chép đường dẫn",f4d:"Nhanh chóng sao chép đường dẫn thư mục hiện tại vào bộ nhớ tạm từ menu thanh công cụ.",f5t:"21 ngôn ngữ",f5d:"Bản địa hóa đầy đủ 21 ngôn ngữ bao gồm tiếng Anh, Trung, Nhật, Hàn, Pháp, Đức và nhiều hơn.",f6t:"Nhẹ",f6d:"Không có tiến trình nền, không có yêu cầu mạng, không theo dõi. Tiện ích mở rộng Finder đơn giản và nhanh.",ssTitle:"Ảnh chụp màn hình",ss1t:"Menu thanh công cụ",ss1d:"Nhấp nút OpenWith trên thanh công cụ Finder để hiển thị menu thả xuống với tất cả ứng dụng đã cấu hình.",ss2t:"Menu chuột phải",ss2d:"Nhấp chuột phải vào thư mục để tìm menu con OpenWith.",ss3t:"Thêm và chỉnh sửa ứng dụng",ss3d:"Chọn tệp .app để thêm dễ dàng. Tự động phát hiện tên, biểu tượng và lệnh khởi chạy.",ss4t:"Cài đặt",ss4d:"Cấu hình tùy chọn ngôn ngữ, tìm hiểu cách kích hoạt tiện ích và tùy chỉnh trải nghiệm.",guideTitle:"Thiết lập nhanh",g1t:"Thêm ứng dụng",g1d:"Mở OpenWith và thêm các ứng dụng bạn muốn sử dụng (Terminal, VS Code, iTerm2, v.v.).",g2t:"Kích hoạt tiện ích",g2d:"Vào Cài đặt Hệ thống → Quyền riêng tư & Bảo mật → Tiện ích mở rộng → Tiện ích đã thêm và bật OpenWith.",g3t:"Thêm vào thanh công cụ",g3d:"Trong Finder, nhấp chuột phải vào thanh công cụ → Tùy chỉnh Thanh công cụ, kéo nút OpenWith vào.",g4t:"Bắt đầu sử dụng",g4d:"Nhấp nút thanh công cụ hoặc chuột phải vào thư mục để mở trong ứng dụng yêu thích!",privacy:"Chính sách Bảo mật",contact:"Liên hệ"},
+id:{navFeatures:"Fitur",navScreenshots:"Tangkapan Layar",navSetup:"Pengaturan",heroTitle:"Buka folder Finder di aplikasi apa pun",heroDesc:"Tambahkan tombol toolbar atau menu klik kanan ke Finder untuk langsung membuka folder di Terminal, VS Code, iTerm2, atau aplikasi pilihan Anda.",featuresTitle:"Fitur",f1t:"Tombol Toolbar",f1d:"Menu dropdown di toolbar Finder. Satu klik untuk membuka folder saat ini di aplikasi apa pun.",f2t:"Menu Konteks",f2d:"Klik kanan pada folder apa pun dan temukan OpenWith di menu konteks.",f3t:"Perintah Cerdas",f3d:"Mendeteksi otomatis alat pengembangan populer dan menghasilkan perintah peluncuran optimal. Mendukung perintah kustom dengan %PATH%.",f4t:"Salin Path",f4d:"Salin cepat path direktori saat ini ke clipboard dari menu toolbar.",f5t:"21 Bahasa",f5d:"Lokalisasi lengkap dalam 21 bahasa termasuk Inggris, Cina, Jepang, Korea, Prancis, Jerman, dan lainnya.",f6t:"Ringan",f6d:"Tanpa proses latar belakang, tanpa permintaan jaringan, tanpa pelacakan. Ekstensi Finder yang sederhana dan cepat.",ssTitle:"Tangkapan Layar",ss1t:"Menu Toolbar",ss1d:"Klik tombol OpenWith di toolbar Finder untuk menampilkan menu dropdown dengan semua aplikasi yang dikonfigurasi.",ss2t:"Menu Konteks",ss2d:"Klik kanan pada folder apa pun untuk menemukan submenu OpenWith.",ss3t:"Tambah & Edit Aplikasi",ss3d:"Pilih file .app untuk menambahkan dengan mudah. Deteksi otomatis nama, ikon, dan perintah peluncuran.",ss4t:"Pengaturan",ss4d:"Konfigurasi preferensi bahasa, pelajari cara mengaktifkan ekstensi, dan sesuaikan pengalaman Anda.",guideTitle:"Pengaturan Cepat",g1t:"Tambah Aplikasi",g1d:"Buka OpenWith dan tambahkan aplikasi yang ingin Anda gunakan (Terminal, VS Code, iTerm2, dll.).",g2t:"Aktifkan Ekstensi",g2d:"Buka Pengaturan Sistem → Privasi & Keamanan → Ekstensi → Ekstensi Ditambahkan, dan aktifkan OpenWith.",g3t:"Tambah ke Toolbar",g3d:"Di Finder, klik kanan toolbar → Sesuaikan Toolbar, seret tombol OpenWith.",g4t:"Mulai Gunakan",g4d:"Klik tombol toolbar atau klik kanan folder untuk membukanya di aplikasi favorit Anda!",privacy:"Kebijakan Privasi",contact:"Kontak"},
+ms:{navFeatures:"Ciri-ciri",navScreenshots:"Tangkapan Skrin",navSetup:"Persediaan",heroTitle:"Buka folder Finder dalam mana-mana aplikasi",heroDesc:"Tambah butang bar alat atau menu klik kanan ke Finder untuk membuka mana-mana folder dalam Terminal, VS Code, iTerm2 atau aplikasi pilihan anda.",featuresTitle:"Ciri-ciri",f1t:"Butang Bar Alat",f1d:"Menu juntai bawah di bar alat Finder. Satu klik untuk membuka folder semasa dalam mana-mana aplikasi.",f2t:"Menu Konteks",f2d:"Klik kanan pada mana-mana folder dan cari OpenWith dalam menu konteks.",f3t:"Arahan Pintar",f3d:"Mengesan alat pembangunan popular secara automatik dan menjana arahan pelancaran optimum. Menyokong arahan tersuai dengan %PATH%.",f4t:"Salin Laluan",f4d:"Salin laluan direktori semasa ke papan keratan dengan pantas dari menu bar alat.",f5t:"21 Bahasa",f5d:"Penyetempatan penuh dalam 21 bahasa termasuk Inggeris, Cina, Jepun, Korea, Perancis, Jerman dan lagi.",f6t:"Ringan",f6d:"Tiada proses latar belakang, tiada permintaan rangkaian, tiada penjejakan. Sambungan Finder yang mudah dan pantas.",ssTitle:"Tangkapan Skrin",ss1t:"Menu Bar Alat",ss1d:"Klik butang OpenWith di bar alat Finder untuk memaparkan menu juntai bawah dengan semua aplikasi yang dikonfigurasi.",ss2t:"Menu Konteks",ss2d:"Klik kanan pada mana-mana folder untuk mencari submenu OpenWith.",ss3t:"Tambah & Edit Aplikasi",ss3d:"Pilih fail .app untuk menambah dengan mudah. Pengesanan automatik nama, ikon dan arahan pelancaran.",ss4t:"Tetapan",ss4d:"Konfigurasikan keutamaan bahasa, pelajari cara mengaktifkan sambungan dan sesuaikan pengalaman anda.",guideTitle:"Persediaan Pantas",g1t:"Tambah Aplikasi",g1d:"Buka OpenWith dan tambah aplikasi yang ingin digunakan (Terminal, VS Code, iTerm2, dll.).",g2t:"Aktifkan Sambungan",g2d:"Pergi ke Tetapan Sistem → Privasi & Keselamatan → Sambungan → Sambungan Ditambah dan aktifkan OpenWith.",g3t:"Tambah ke Bar Alat",g3d:"Dalam Finder, klik kanan bar alat → Sesuaikan Bar Alat, seret butang OpenWith.",g4t:"Mula Gunakan",g4d:"Klik butang bar alat atau klik kanan folder untuk membukanya dalam aplikasi kegemaran anda!",privacy:"Dasar Privasi",contact:"Hubungi"},
+hi:{navFeatures:"विशेषताएँ",navScreenshots:"स्क्रीनशॉट",navSetup:"सेटअप",heroTitle:"Finder फ़ोल्डर को किसी भी ऐप में खोलें",heroDesc:"Finder में टूलबार बटन या राइट-क्लिक मेनू जोड़ें और Terminal, VS Code, iTerm2 या अपनी पसंद के किसी भी ऐप में फ़ोल्डर तुरंत खोलें।",featuresTitle:"विशेषताएँ",f1t:"टूलबार बटन",f1d:"Finder टूलबार में ड्रॉपडाउन मेनू। वर्तमान फ़ोल्डर को किसी भी ऐप में खोलने के लिए एक क्लिक।",f2t:"कॉन्टेक्स्ट मेनू",f2d:"किसी भी फ़ोल्डर पर राइट-क्लिक करें और कॉन्टेक्स्ट मेनू में OpenWith खोजें।",f3t:"स्मार्ट कमांड",f3d:"लोकप्रिय डेव टूल्स को स्वचालित रूप से पहचानता है और इष्टतम लॉन्च कमांड तैयार करता है। %PATH% के साथ कस्टम कमांड का समर्थन करता है।",f4t:"पथ कॉपी करें",f4d:"टूलबार मेनू से वर्तमान डायरेक्टरी पथ को क्लिपबोर्ड पर जल्दी से कॉपी करें।",f5t:"21 भाषाएँ",f5d:"अंग्रेज़ी, चीनी, जापानी, कोरियाई, फ़्रेंच, जर्मन और अधिक सहित 21 भाषाओं में पूर्ण स्थानीयकरण।",f6t:"हल्का",f6d:"कोई बैकग्राउंड प्रोसेस नहीं, कोई नेटवर्क रिक्वेस्ट नहीं, कोई ट्रैकिंग नहीं। एक सरल, तेज़ Finder एक्सटेंशन।",ssTitle:"स्क्रीनशॉट",ss1t:"टूलबार मेनू",ss1d:"Finder टूलबार में OpenWith बटन पर क्लिक करके सभी कॉन्फ़िगर किए गए ऐप्स का ड्रॉपडाउन मेनू देखें।",ss2t:"कॉन्टेक्स्ट मेनू",ss2d:"किसी भी फ़ोल्डर पर राइट-क्लिक करके OpenWith सबमेनू खोजें।",ss3t:"ऐप्स जोड़ें और संपादित करें",ss3d:".app फ़ाइल चुनकर आसानी से जोड़ें। नाम, आइकन और लॉन्च कमांड स्वचालित रूप से पहचाने जाते हैं।",ss4t:"सेटिंग्स",ss4d:"भाषा प्राथमिकताएँ कॉन्फ़िगर करें, एक्सटेंशन को सक्रिय करना सीखें और अपना अनुभव कस्टमाइज़ करें।",guideTitle:"त्वरित सेटअप",g1t:"ऐप्स जोड़ें",g1d:"OpenWith खोलें और उन ऐप्स को जोड़ें जिन्हें आप उपयोग करना चाहते हैं (Terminal, VS Code, iTerm2, आदि)।",g2t:"एक्सटेंशन सक्रिय करें",g2d:"सिस्टम सेटिंग्स → प्राइवेसी और सिक्योरिटी → एक्सटेंशन → जोड़े गए एक्सटेंशन पर जाएँ और OpenWith सक्रिय करें।",g3t:"टूलबार में जोड़ें",g3d:"Finder में टूलबार पर राइट-क्लिक → टूलबार कस्टमाइज़ करें, OpenWith बटन को ड्रैग करें।",g4t:"उपयोग शुरू करें",g4d:"टूलबार बटन पर क्लिक करें या फ़ोल्डर पर राइट-क्लिक करके अपने पसंदीदा ऐप में खोलें!",privacy:"गोपनीयता नीति",contact:"संपर्क"},
+ar:{navFeatures:"الميزات",navScreenshots:"لقطات الشاشة",navSetup:"الإعداد",heroTitle:"افتح مجلدات Finder في أي تطبيق",heroDesc:"أضف زر شريط أدوات أو قائمة النقر بزر الماوس الأيمن إلى Finder لفتح أي مجلد فوراً في Terminal أو VS Code أو iTerm2 أو أي تطبيق تختاره.",featuresTitle:"الميزات",f1t:"زر شريط الأدوات",f1d:"قائمة منسدلة في شريط أدوات Finder. نقرة واحدة لفتح المجلد الحالي في أي تطبيق.",f2t:"قائمة السياق",f2d:"انقر بزر الماوس الأيمن على أي مجلد وابحث عن OpenWith في قائمة السياق.",f3t:"أوامر ذكية",f3d:"يكتشف تلقائياً أدوات التطوير الشائعة وينشئ أوامر تشغيل مثالية. يدعم الأوامر المخصصة مع %PATH%.",f4t:"نسخ المسار",f4d:"انسخ بسرعة مسار الدليل الحالي إلى الحافظة من قائمة شريط الأدوات.",f5t:"21 لغة",f5d:"ترجمة كاملة لـ 21 لغة تشمل الإنجليزية والصينية واليابانية والكورية والفرنسية والألمانية والمزيد.",f6t:"خفيف الوزن",f6d:"لا عمليات خلفية، لا طلبات شبكة، لا تتبع. إضافة Finder بسيطة وسريعة.",ssTitle:"لقطات الشاشة",ss1t:"قائمة شريط الأدوات",ss1d:"انقر على زر OpenWith في شريط أدوات Finder لعرض القائمة المنسدلة بجميع التطبيقات المُعدة.",ss2t:"قائمة السياق",ss2d:"انقر بزر الماوس الأيمن على أي مجلد للعثور على القائمة الفرعية OpenWith.",ss3t:"إضافة وتعديل التطبيقات",ss3d:"اختر ملف .app للإضافة بسهولة. يكتشف تلقائياً الاسم والأيقونة وأمر التشغيل.",ss4t:"الإعدادات",ss4d:"اضبط تفضيلات اللغة، تعلم كيفية تفعيل الإضافة، وخصص تجربتك.",guideTitle:"إعداد سريع",g1t:"أضف تطبيقاتك",g1d:"افتح OpenWith وأضف التطبيقات التي تريد استخدامها (Terminal، VS Code، iTerm2، إلخ).",g2t:"فعّل الإضافة",g2d:"انتقل إلى إعدادات النظام ← الخصوصية والأمان ← الإضافات ← الإضافات المُضافة، وفعّل OpenWith.",g3t:"أضف لشريط الأدوات",g3d:"في Finder، انقر بزر الماوس الأيمن على شريط الأدوات ← تخصيص شريط الأدوات، ثم اسحب زر OpenWith.",g4t:"ابدأ الاستخدام",g4d:"انقر على زر شريط الأدوات أو انقر بزر الماوس الأيمن على مجلد لفتحه في تطبيقك المفضل!",privacy:"سياسة الخصوصية",contact:"اتصل بنا"},
+he:{navFeatures:"תכונות",navScreenshots:"צילומי מסך",navSetup:"הגדרה",heroTitle:"פתח תיקיות Finder בכל אפליקציה",heroDesc:"הוסף כפתור בסרגל הכלים או תפריט לחיצה ימנית ל-Finder ופתח מיד כל תיקייה ב-Terminal, VS Code, iTerm2 או כל אפליקציה שתבחר.",featuresTitle:"תכונות",f1t:"כפתור סרגל כלים",f1d:"תפריט נפתח בסרגל הכלים של Finder. לחיצה אחת לפתיחת התיקייה הנוכחית בכל אפליקציה.",f2t:"תפריט הקשר",f2d:"לחץ לחיצה ימנית על כל תיקייה ומצא את OpenWith בתפריט ההקשר.",f3t:"פקודות חכמות",f3d:"מזהה אוטומטית כלי פיתוח פופולריים ויוצר פקודות הפעלה אופטימליות. תומך בפקודות מותאמות אישית עם %PATH%.",f4t:"העתק נתיב",f4d:"העתק במהירות את נתיב הספרייה הנוכחית ללוח מתפריט סרגל הכלים.",f5t:"21 שפות",f5d:"לוקליזציה מלאה ב-21 שפות כולל אנגלית, סינית, יפנית, קוריאנית, צרפתית, גרמנית ועוד.",f6t:"קל משקל",f6d:"ללא תהליכי רקע, ללא בקשות רשת, ללא מעקב. תוסף Finder פשוט ומהיר.",ssTitle:"צילומי מסך",ss1t:"תפריט סרגל כלים",ss1d:"לחץ על כפתור OpenWith בסרגל הכלים של Finder כדי להציג תפריט נפתח עם כל האפליקציות המוגדרות.",ss2t:"תפריט הקשר",ss2d:"לחץ לחיצה ימנית על כל תיקייה כדי למצוא את תפריט המשנה של OpenWith.",ss3t:"הוסף וערוך אפליקציות",ss3d:"בחר קובץ .app להוספה בקלות. זיהוי אוטומטי של שם, סמל ופקודת הפעלה.",ss4t:"הגדרות",ss4d:"הגדר העדפות שפה, למד כיצד להפעיל את התוסף והתאם אישית את החוויה שלך.",guideTitle:"הגדרה מהירה",g1t:"הוסף אפליקציות",g1d:"פתח את OpenWith והוסף את האפליקציות שברצונך להשתמש בהן (Terminal, VS Code, iTerm2 וכו').",g2t:"הפעל תוסף",g2d:"עבור להגדרות מערכת ← פרטיות ואבטחה ← תוספים ← תוספים שנוספו, והפעל את OpenWith.",g3t:"הוסף לסרגל כלים",g3d:"ב-Finder, לחץ ימני על סרגל הכלים ← התאם אישית סרגל כלים, גרור את כפתור OpenWith.",g4t:"התחל להשתמש",g4d:"לחץ על כפתור סרגל הכלים או לחץ ימני על תיקייה כדי לפתוח אותה באפליקציה המועדפת!",privacy:"מדיניות פרטיות",contact:"צור קשר"}
+};
 
-    // Auto-detect language
-    (function() {
-        var saved = localStorage.getItem('lang');
-        if (saved) {
-            setLang(saved);
-        } else {
-            var userLang = navigator.language || navigator.userLanguage || '';
-            setLang(userLang.startsWith('zh') ? 'zh' : 'en');
-        }
-    })();
+// Screenshot mapping: only zh-Hans and zh-Hant use Chinese screenshots, others use English
+var imgMap={"zh-Hans":"zh","zh-Hant":"zh"};
 
-    // Smooth scroll for nav links
-    document.querySelectorAll('nav a[href^="#"]').forEach(function(a) {
-        a.addEventListener('click', function(e) {
-            e.preventDefault();
-            var target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
+function setLang(lang){
+    if(!I[lang])lang="en";
+    var t=I[lang];
+    document.querySelectorAll("[data-i]").forEach(function(el){
+        var k=el.getAttribute("data-i");
+        if(t[k])el.textContent=t[k];
+        else if(I.en[k])el.textContent=I.en[k];
     });
+    // Update images
+    var folder=imgMap[lang]||"en";
+    var prefix=folder==="zh"?"zh":"en";
+    document.getElementById("img-main").src="screenshots/"+folder+"/"+prefix+"-main.png";
+    document.getElementById("img-toolbar").src="screenshots/"+folder+"/"+prefix+"-toolbar.png";
+    document.getElementById("img-context").src="screenshots/"+folder+"/"+prefix+"-context.png";
+    document.getElementById("img-add").src="screenshots/"+folder+"/"+prefix+"-add.png";
+    document.getElementById("img-settings").src="screenshots/"+folder+"/"+prefix+"-settings.png";
+    document.getElementById("img-customize").src="screenshots/"+folder+"/"+prefix+"-customize-toolbar.png";
+    // Update select
+    document.getElementById("lang-select").value=lang;
+    // Update html lang & dir
+    document.documentElement.lang=lang;
+    document.documentElement.dir=(lang==="ar"||lang==="he")?"rtl":"ltr";
+    localStorage.setItem("lang",lang);
+}
+
+// Init: default English
+(function(){
+    var saved=localStorage.getItem("lang");
+    if(saved&&I[saved]){setLang(saved);return;}
+    setLang("en");
+})();
+
+// Smooth scroll
+document.querySelectorAll('nav a[href^="#"]').forEach(function(a){
+    a.addEventListener("click",function(e){
+        e.preventDefault();
+        var t=document.querySelector(this.getAttribute("href"));
+        if(t)t.scrollIntoView({behavior:"smooth",block:"start"});
+    });
+});
 </script>
 
 </body>
