@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenWith - Open Finder Folders in Any App</title>
+    <meta name="description" content="OpenWith lets you open the current Finder directory in your favorite apps with a single click. Toolbar button, context menu, and custom launch commands.">
+    <link rel="icon" type="image/png" href="screenshots/en/en-main.png">
+    <style>
+        :root {
+            --primary: #1a6de0;
+            --primary-light: #e8f0fe;
+            --text: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --bg: #ffffff;
+            --card-bg: #f5f5f7;
+            --border: #d2d2d7;
+            --max-width: 960px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text: #f5f5f7;
+                --text-secondary: #a1a1a6;
+                --bg: #1d1d1f;
+                --card-bg: #2d2d2f;
+                --border: #424245;
+                --primary-light: #1a3a5c;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Nav */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            nav {
+                background: rgba(29,29,31,0.8);
+            }
+        }
+
+        .nav-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .lang-switch {
+            display: inline-flex;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            font-size: 13px;
+        }
+
+        .lang-switch button {
+            padding: 4px 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .lang-switch button.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* Hero */
+        .hero {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 80px 24px 60px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .badge-link {
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+
+        .badge-link:hover {
+            opacity: 0.8;
+        }
+
+        .badge-link img {
+            height: 48px;
+        }
+
+        .hero-screenshot {
+            margin-top: 48px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-screenshot img {
+            max-width: 580px;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .hero-screenshot img {
+                box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+            }
+        }
+
+        /* Features */
+        .features {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .features h2 {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 28px;
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .feature-card h3 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Screenshots */
+        .screenshots {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .screenshots h2 {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .screenshot-section {
+            margin-bottom: 56px;
+        }
+
+        .screenshot-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .screenshot-row {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .screenshot-row.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .screenshot-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .screenshot-text h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .screenshot-text p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .screenshot-img {
+            flex: 1.2;
+            min-width: 0;
+        }
+
+        .screenshot-img img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .screenshot-img img {
+                box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+            }
+        }
+
+        /* Guide */
+        .guide {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .guide h2 {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .step {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 28px;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .step h3 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .step img {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+
+        .footer-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 32px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 17px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .screenshot-row,
+            .screenshot-row.reverse {
+                flex-direction: column;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+
+            .nav-links {
+                gap: 16px;
+            }
+        }
+
+        /* i18n */
+        [lang="zh"] .en-only,
+        [lang="en"] .zh-only {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+    <div class="nav-inner">
+        <a href="#" class="nav-brand">OpenWith</a>
+        <div class="nav-links">
+            <a href="#features" class="en-only">Features</a>
+            <a href="#features" class="zh-only">功能</a>
+            <a href="#screenshots" class="en-only">Screenshots</a>
+            <a href="#screenshots" class="zh-only">截图</a>
+            <a href="#guide" class="en-only">Setup</a>
+            <a href="#guide" class="zh-only">设置指南</a>
+            <div class="lang-switch">
+                <button onclick="setLang('en')" id="btn-en" class="active">EN</button>
+                <button onclick="setLang('zh')" id="btn-zh">中文</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+    <h1>
+        <span class="en-only">Open Finder Folders in Any App</span>
+        <span class="zh-only">在 Finder 中一键打开任意应用</span>
+    </h1>
+    <p>
+        <span class="en-only">Add a toolbar button or right-click menu to Finder, and instantly open any folder in Terminal, VS Code, iTerm2, or any app you choose.</span>
+        <span class="zh-only">在 Finder 工具栏添加按钮或使用右键菜单，即可快速用终端、VS Code、iTerm2 或任何应用打开文件夹。</span>
+    </p>
+
+    <!-- Mac App Store Badge placeholder -->
+    <!--
+    <a href="https://apps.apple.com/app/openwith/idXXXXXXXXX" class="badge-link">
+        <img class="en-only" src="https://developer.apple.com/assets/elements/badges/download-on-the-mac-app-store.svg" alt="Download on the Mac App Store">
+        <img class="zh-only" src="https://developer.apple.com/assets/elements/badges/download-on-the-mac-app-store.svg" alt="在 Mac App Store 下载">
+    </a>
+    -->
+
+    <div class="hero-screenshot">
+        <img class="en-only" src="screenshots/en/en-main.png" alt="OpenWith main interface">
+        <img class="zh-only" src="screenshots/zh/zh-main.png" alt="OpenWith 主界面">
+    </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+    <h2>
+        <span class="en-only">Features</span>
+        <span class="zh-only">功能特点</span>
+    </h2>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🗂</div>
+            <h3>
+                <span class="en-only">Toolbar Button</span>
+                <span class="zh-only">工具栏按钮</span>
+            </h3>
+            <p>
+                <span class="en-only">A dropdown menu right in the Finder toolbar. One click to open the current folder in any app.</span>
+                <span class="zh-only">在 Finder 工具栏添加下拉菜单按钮，一键用任意应用打开当前文件夹。</span>
+            </p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h3>
+                <span class="en-only">Context Menu</span>
+                <span class="zh-only">右键菜单</span>
+            </h3>
+            <p>
+                <span class="en-only">Right-click on any folder and find OpenWith in the context menu. Works everywhere in Finder.</span>
+                <span class="zh-only">右键点击任意文件夹即可在菜单中找到 OpenWith，在 Finder 任何位置使用。</span>
+            </p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">⚡️</div>
+            <h3>
+                <span class="en-only">Smart Commands</span>
+                <span class="zh-only">智能命令</span>
+            </h3>
+            <p>
+                <span class="en-only">Auto-detects popular dev tools and generates optimal launch commands. Supports custom commands with %PATH%.</span>
+                <span class="zh-only">自动识别常用开发工具并生成最佳启动命令，支持通过 %PATH% 自定义命令。</span>
+            </p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📎</div>
+            <h3>
+                <span class="en-only">Copy Path</span>
+                <span class="zh-only">复制路径</span>
+            </h3>
+            <p>
+                <span class="en-only">Quickly copy the current directory path to clipboard from the toolbar menu.</span>
+                <span class="zh-only">从工具栏菜单快速复制当前目录路径到剪贴板。</span>
+            </p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🌐</div>
+            <h3>
+                <span class="en-only">21 Languages</span>
+                <span class="zh-only">21 种语言</span>
+            </h3>
+            <p>
+                <span class="en-only">Full localization in 21 languages including English, Chinese, Japanese, Korean, French, German, and more.</span>
+                <span class="zh-only">完整支持 21 种语言，包括中文、英文、日文、韩文、法文、德文等。</span>
+            </p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🪶</div>
+            <h3>
+                <span class="en-only">Lightweight</span>
+                <span class="zh-only">轻量无后台</span>
+            </h3>
+            <p>
+                <span class="en-only">No background processes, no network requests, no tracking. Just a simple, fast Finder extension.</span>
+                <span class="zh-only">无后台进程、无网络请求、无数据追踪。简单、快速的 Finder 扩展。</span>
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Screenshots -->
+<section class="screenshots" id="screenshots">
+    <h2>
+        <span class="en-only">Screenshots</span>
+        <span class="zh-only">截图预览</span>
+    </h2>
+
+    <div class="screenshot-section">
+        <div class="screenshot-row">
+            <div class="screenshot-text">
+                <h3>
+                    <span class="en-only">Toolbar Menu</span>
+                    <span class="zh-only">工具栏菜单</span>
+                </h3>
+                <p>
+                    <span class="en-only">Click the OpenWith button in the Finder toolbar to reveal a dropdown menu with all your configured apps. Open any folder instantly.</span>
+                    <span class="zh-only">点击 Finder 工具栏中的 OpenWith 按钮，展开下拉菜单显示所有已配置的应用，即可快速打开当前文件夹。</span>
+                </p>
+            </div>
+            <div class="screenshot-img">
+                <img class="en-only" src="screenshots/en/en-toolbar.png" alt="Toolbar menu">
+                <img class="zh-only" src="screenshots/zh/zh-toolbar.png" alt="工具栏菜单">
+            </div>
+        </div>
+    </div>
+
+    <div class="screenshot-section">
+        <div class="screenshot-row reverse">
+            <div class="screenshot-text">
+                <h3>
+                    <span class="en-only">Context Menu</span>
+                    <span class="zh-only">右键菜单</span>
+                </h3>
+                <p>
+                    <span class="en-only">Right-click any folder to find OpenWith in the context menu. All your configured apps are just a click away.</span>
+                    <span class="zh-only">右键点击任意文件夹，在菜单中找到 OpenWith 子菜单，所有已配置的应用触手可及。</span>
+                </p>
+            </div>
+            <div class="screenshot-img">
+                <img class="en-only" src="screenshots/en/en-context.png" alt="Context menu">
+                <img class="zh-only" src="screenshots/zh/zh-context.png" alt="右键菜单">
+            </div>
+        </div>
+    </div>
+
+    <div class="screenshot-section">
+        <div class="screenshot-row">
+            <div class="screenshot-text">
+                <h3>
+                    <span class="en-only">Add & Edit Apps</span>
+                    <span class="zh-only">添加和编辑应用</span>
+                </h3>
+                <p>
+                    <span class="en-only">Easily add new apps by selecting the .app file. OpenWith auto-detects the app name, icon, and generates the best launch command.</span>
+                    <span class="zh-only">选择 .app 文件即可轻松添加新应用。OpenWith 自动识别应用名称、图标，并生成最佳启动命令。</span>
+                </p>
+            </div>
+            <div class="screenshot-img">
+                <img class="en-only" src="screenshots/en/en-add.png" alt="Add app">
+                <img class="zh-only" src="screenshots/zh/zh-add.png" alt="添加应用">
+            </div>
+        </div>
+    </div>
+
+    <div class="screenshot-section">
+        <div class="screenshot-row reverse">
+            <div class="screenshot-text">
+                <h3>
+                    <span class="en-only">Settings</span>
+                    <span class="zh-only">设置</span>
+                </h3>
+                <p>
+                    <span class="en-only">Configure language preferences, learn how to enable the extension, and customize your experience.</span>
+                    <span class="zh-only">配置语言偏好，了解如何启用扩展，自定义你的使用体验。</span>
+                </p>
+            </div>
+            <div class="screenshot-img">
+                <img class="en-only" src="screenshots/en/en-settings.png" alt="Settings">
+                <img class="zh-only" src="screenshots/zh/zh-settings.png" alt="设置">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Setup Guide -->
+<section class="guide" id="guide">
+    <h2>
+        <span class="en-only">Quick Setup</span>
+        <span class="zh-only">快速设置</span>
+    </h2>
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <h3>
+                <span class="en-only">Add Your Apps</span>
+                <span class="zh-only">添加应用</span>
+            </h3>
+            <p>
+                <span class="en-only">Open OpenWith and add the apps you want to use (Terminal, VS Code, iTerm2, etc.).</span>
+                <span class="zh-only">打开 OpenWith，添加你常用的应用（终端、VS Code、iTerm2 等）。</span>
+            </p>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <h3>
+                <span class="en-only">Enable Extension</span>
+                <span class="zh-only">启用扩展</span>
+            </h3>
+            <p>
+                <span class="en-only">Go to System Settings → Privacy & Security → Extensions → Added Extensions, and enable OpenWith.</span>
+                <span class="zh-only">前往系统设置 → 隐私与安全性 → 扩展 → 添加的扩展，启用 OpenWith。</span>
+            </p>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <h3>
+                <span class="en-only">Add to Toolbar</span>
+                <span class="zh-only">添加到工具栏</span>
+            </h3>
+            <p>
+                <span class="en-only">In Finder, right-click the toolbar → Customize Toolbar, then drag the OpenWith button to the toolbar.</span>
+                <span class="zh-only">在 Finder 中右键工具栏 → 自定义工具栏，将 OpenWith 按钮拖入工具栏。</span>
+            </p>
+            <img class="en-only" src="screenshots/en/en-customize-toolbar.png" alt="Customize toolbar">
+            <img class="zh-only" src="screenshots/zh/zh-customize-toolbar.png" alt="自定义工具栏">
+        </div>
+        <div class="step">
+            <div class="step-number">4</div>
+            <h3>
+                <span class="en-only">Start Using</span>
+                <span class="zh-only">开始使用</span>
+            </h3>
+            <p>
+                <span class="en-only">Click the toolbar button or right-click a folder to open it in your favorite app!</span>
+                <span class="zh-only">点击工具栏按钮或右键文件夹，即可用你喜欢的应用打开！</span>
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-inner">
+        <span>&copy; 2025 Teffy Apps. All rights reserved.</span>
+        <div class="footer-links">
+            <a href="privacy.html">
+                <span class="en-only">Privacy Policy</span>
+                <span class="zh-only">隐私政策</span>
+            </a>
+            <a href="mailto:lsmfeixiang@163.com">
+                <span class="en-only">Contact</span>
+                <span class="zh-only">联系我们</span>
+            </a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    function setLang(lang) {
+        document.documentElement.lang = lang;
+        document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+        document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+        localStorage.setItem('lang', lang);
+    }
+
+    // Auto-detect language
+    (function() {
+        var saved = localStorage.getItem('lang');
+        if (saved) {
+            setLang(saved);
+        } else {
+            var userLang = navigator.language || navigator.userLanguage || '';
+            setLang(userLang.startsWith('zh') ? 'zh' : 'en');
+        }
+    })();
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('nav a[href^="#"]').forEach(function(a) {
+        a.addEventListener('click', function(e) {
+            e.preventDefault();
+            var target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
